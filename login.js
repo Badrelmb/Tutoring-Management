@@ -2,7 +2,7 @@
 const supabaseUrl = "https://ugguhkcxvjunmoebtxow.supabase.co"; 
 const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVnZ3Voa2N4dmp1bm1vZWJ0eG93Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk4NjkwMTQsImV4cCI6MjA1NTQ0NTAxNH0.nvKCwO43yjS6-JQhg7DzUEwEkA14zi7Tw332zMbC_GY"; 
 
-const supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
+const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
 
 document.addEventListener("DOMContentLoaded", function () {
     // Handle Login Form Submission
@@ -26,22 +26,26 @@ document.addEventListener("DOMContentLoaded", function () {
             .single();
 
         if (error || !data) {
-            alert("Invalid username or password.");
+           alert("❌ Error fetching data. Please try again.");
             return;
         }
 
+        if (!data) {
+                alert("⚠ Invalid username or password.");
+                return;
+            }
+
         try {
             // Verify password using bcryptjs (must be included in HTML)
-            const match = await bcrypt.compare(password, data.password_hash);
+            const match = await window.bcrypt.compare(password, data.password_hash);
             if (match) {
-                alert("Login successful!");
+               alert("✅ Login successful!");
                 window.location.href = "main.html"; // Redirect after successful login
             } else {
-                alert("Invalid username or password.");
+                alert("⚠ Invalid username or password.");
             }
         } catch (err) {
-            console.error("Error verifying password:", err);
-            alert("An error occurred. Please try again.");
+        alert(`❌ An error occurred: ${err.message}`);
         }
     });
 });
