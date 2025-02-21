@@ -1,8 +1,9 @@
 // Ensure bcrypt.js is loaded
 if (typeof bcrypt === "undefined") {
-    console.error("❌ bcrypt.js is not loaded! Check script order in index.html.");
+    console.error("❌ bcrypt.js is STILL not loaded! Check script order in index.html.");
+} else {
+    console.log("✅ bcrypt.js is loaded successfully.");
 }
-
 
 // Ensure Supabase is properly initialized
 const supabase = window.supabase.createClient(
