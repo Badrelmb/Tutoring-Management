@@ -1,8 +1,16 @@
+// Check if Supabase is loaded
+if (typeof supabase === "undefined") {
+    console.error("Supabase is not loaded! Check your script order.");
+}
+
 // Initialize Supabase client
 const supabase = supabase.createClient(
     "https://ugguhkcxvjunmoebtxow.supabase.co",
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVnZ3Voa2N4dmp1bm1vZWJ0eG93Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk4NjkwMTQsImV4cCI6MjA1NTQ0NTAxNH0.nvKCwO43yjS6-JQhg7DzUEwEkA14zi7Tw332zMbC_GY"
 );
+
+// Log to check if it's initialized
+console.log("Supabase client initialized:", supabase);
 
 // Handle login form submission
 document.getElementById("login-form").addEventListener("submit", async (e) => {
