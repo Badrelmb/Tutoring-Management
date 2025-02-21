@@ -1,40 +1,47 @@
-// Initialize Supabase
+// Initialize Supabase with manually added credentials
 const supabaseUrl = "https://ugguhkcxvjunmoebtxow.supabase.co"; 
 const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVnZ3Voa2N4dmp1bm1vZWJ0eG93Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk4NjkwMTQsImV4cCI6MjA1NTQ0NTAxNH0.nvKCwO43yjS6-JQhg7DzUEwEkA14zi7Tw332zMbC_GY"; 
 
-const supabase = supabase.createClient(
-    process.env.SUPABASE_URL, 
-    process.env.SUPABASE_ANON_KEY
-);
+const supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
 
+document.addEventListener("DOMContentLoaded", function () {
+    // Handle Login Form Submission
+    document.querySelector(".login-form").addEventListener("submit", async (event) => {
+        event.preventDefault(); // Prevent form submission
 
-// Handle Login
-document.querySelector(".login-form").addEventListener("submit", async (event) => {
-    event.preventDefault();
+        // Get user input
+        const username = document.querySelector("input[name='username']").value;
+        const password = document.querySelector("input[name='password']").value;
 
-    // Get user input
-    const username = document.querySelector("input[name='username']").value;
-    const password = document.querySelector("input[name='password']").value;
+        if (!username || !password) {
+            alert("Please enter both username and password.");
+            return;
+        }
 
-    // Fetch stored credentials from Supabase
-    let { data, error } = await supabase
-        .from("admin_credentials")
-        .select("password_hash")
-        .eq("username", username)
-        .single();
+        // Fetch stored credentials from Supabase
+        let { data, error } = await supabase
+            .from("admin_credentials")
+            .select("password_hash")
+            .eq("username", username)
+            .single();
 
-    if (error || !data) {
-        alert("Invalid username or password.");
-        return;
-    }
+        if (error || !data) {
+            alert("Invalid username or password.");
+            return;
+        }
 
-    // Verify password using bcrypt.js
-    const match = await bcrypt.compare(password, data.password_hash);
-
-    if (match) {
-        alert("Login successful!");
-        window.location.href = "main.html"; // Redirect to your dashboard
-    } else {
-        alert("Invalid username or password.");
-    }
+        try {
+            // Verify password using bcryptjs (must be included in HTML)
+            const match = await bcrypt.compare(password, data.password_hash);
+            if (match) {
+                alert("Login successful!");
+                window.location.href = "main.html"; // Redirect after successful login
+            } else {
+                alert("Invalid username or password.");
+            }
+        } catch (err) {
+            console.error("Error verifying password:", err);
+            alert("An error occurred. Please try again.");
+        }
+    });
 });
