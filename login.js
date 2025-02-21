@@ -19,12 +19,16 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         // Fetch stored credentials from Supabase
-        let { data, error } = await supabase
-            .from("admin_credentials")
-            .select("password_hash")
-            .eq("username", username)
-            .single();
-
+       let { data, error } = await supabase
+    .from("admin_credentials")
+    .select("*")
+    .headers({
+        "apikey": supabaseAnonKey,
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+    });
+console.log("Supabase Response:", data);
+alert(JSON.stringify(data)); // Show fetched data
         if (error || !data) {
            alert("❌ Error fetching data. Please try again.");
             return;
