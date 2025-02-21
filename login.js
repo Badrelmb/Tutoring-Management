@@ -1,6 +1,6 @@
 // Initialize Supabase with manually added credentials
 const supabaseUrl = "https://ugguhkcxvjunmoebtxow.supabase.co"; 
-const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVnZ3Voa2N4dmp1bm1vZWJ0eG93Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk4NjkwMTQsImV4cCI6MjA1NTQ0NTAxNH0.nvKCwO43yjS6-JQhg7DzUEwEkA14zi7Tw332zMbC_GY"; 
+const supabaseAnonKey = "your_actual_anon_key";
 
 const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
 
