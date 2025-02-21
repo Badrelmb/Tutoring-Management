@@ -1,6 +1,6 @@
 // Initialize Supabase with manually added credentials
 const supabaseUrl = "https://ugguhkcxvjunmoebtxow.supabase.co"; 
-const supabaseAnonKey = "your_actual_anon_key";
+const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVnZ3Voa2N4dmp1bm1vZWJ0eG93Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk4NjkwMTQsImV4cCI6MjA1NTQ0NTAxNH0.nvKCwO43yjS6-JQhg7DzUEwEkA14zi7Tw332zMbC_GY"; 
 
 const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
 
@@ -14,47 +14,40 @@ document.addEventListener("DOMContentLoaded", function () {
         const password = document.querySelector("input[name='password']").value;
 
         if (!username || !password) {
-            alert("Please enter both username and password.");
+            alert("⚠ Please enter both username and password.");
             return;
         }
 
-        // Fetch stored credentials from Supabase
-       let { data, error } = await supabase
-    .from("admin_credentials")
-    .select("*")
-    .headers({
-        "apikey": supabaseAnonKey,
-        "Accept": "application/json",
-        "Content-Type": "application/json"
-    });
-console.log("Supabase Response:", data);
-alert(JSON.stringify(data)); // Show fetched data
-        if (error || !data) {
-           alert("❌ Error fetching data. Please try again.");
-            return;
-        }
+        try {
+            // Fetch stored credentials from Supabase
+            let { data, error } = await supabase
+                .from("admin_credentials")
+                .select("password_hash")
+                .eq("username", username)
+                .single();
 
-        if (!data) {
+            if (error) {
+                console.error("Supabase Fetch Error:", error);
+                alert(`❌ Supabase Error: ${error.message}`);
+                return;
+            }
+
+            if (!data) {
                 alert("⚠ Invalid username or password.");
                 return;
             }
 
-        try {
-    let { data, error } = await supabase
-        .from("admin_credentials")
-        .select("*");  // Fetch all data for debugging
-
-    console.log("Supabase Data:", data); // Debugging
-    alert(JSON.stringify(data)); // Show data to confirm
-
-    if (error) {
-        console.error("Supabase Fetch Error:", error);
-        alert(`❌ Supabase Error: ${error.message}`);
-        return;
-    }
-} catch (err) {
-    alert(`❌ JavaScript Error: ${err.message}`);
-}
-
+            // Verify password using bcryptjs
+            const match = await window.bcrypt.compare(password, data.password_hash);
+            if (match) {
+                alert("✅ Login successful!");
+                window.location.href = "main.html"; // Redirect after successful login
+            } else {
+                alert("⚠ Invalid username or password.");
+            }
+        } catch (err) {
+            console.error("JavaScript Error:", err);
+            alert(`❌ JavaScript Error: ${err.message}`);
+        }
     });
 });
