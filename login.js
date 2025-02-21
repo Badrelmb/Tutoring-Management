@@ -1,15 +1,22 @@
-// Initialize Supabase client correctly
-const supabase = createClient(
+// Ensure Supabase is properly initialized
+const supabase = window.supabase.createClient(
     "https://ugguhkcxvjunmoebtxow.supabase.co",
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVnZ3Voa2N4dmp1bm1vZWJ0eG93Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk4NjkwMTQsImV4cCI6MjA1NTQ0NTAxNH0.nvKCwO43yjS6-JQhg7DzUEwEkA14zi7Tw332zMbC_GY"
 );
 
-// Log Supabase initialization to verify
-console.log("Supabase client initialized:", supabase);
+// Debugging Log: Check if Supabase loaded
+console.log("✅ Supabase initialized:", supabase);
 
-// Ensure the DOM is fully loaded before attaching event listeners
+// Ensure DOM is fully loaded before adding event listeners
 document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("login-form").addEventListener("submit", async (e) => {
+    const loginForm = document.getElementById("login-form");
+
+    if (!loginForm) {
+        console.error("❌ Login form not found in the DOM!");
+        return;
+    }
+
+    loginForm.addEventListener("submit", async (e) => {
         e.preventDefault();
 
         const username = document.getElementById("username").value.trim();
