@@ -36,16 +36,21 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
         try {
-            // Verify password using bcryptjs (must be included in HTML)
-            const match = await window.bcrypt.compare(password, data.password_hash);
-            if (match) {
-               alert("✅ Login successful!");
-                window.location.href = "main.html"; // Redirect after successful login
-            } else {
-                alert("⚠ Invalid username or password.");
-            }
-        } catch (err) {
-        alert(`❌ An error occurred: ${err.message}`);
-        }
+    let { data, error } = await supabase
+        .from("admin_credentials")
+        .select("*");  // Fetch all data for debugging
+
+    console.log("Supabase Data:", data); // Debugging
+    alert(JSON.stringify(data)); // Show data to confirm
+
+    if (error) {
+        console.error("Supabase Fetch Error:", error);
+        alert(`❌ Supabase Error: ${error.message}`);
+        return;
+    }
+} catch (err) {
+    alert(`❌ JavaScript Error: ${err.message}`);
+}
+
     });
 });
