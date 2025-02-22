@@ -22,13 +22,13 @@ body {
  margin-bottom: 30px;
 }
 
-#login-form {
+.login-form {
  display: flex;
  flex-direction: column;
  gap: 15px;
 }
 
-#login-form input {
+.login-form input {
  padding: 12px 15px;
  border: 1px solid #ccc;
  border-radius: 8px;
@@ -37,11 +37,11 @@ body {
  transition: border-color 0.3s;
 }
 
-#login-form input:focus {
+.login-form input:focus {
  border-color: #007BFF;
 }
 
-#login-form button {
+.login-form button {
  padding: 12px;
  background-color: #007BFF;
  color: #fff;
@@ -52,6 +52,6 @@ body {
  transition: background-color 0.3s;
 }
 
-#login-form button:hover {
+.login-form button:hover {
  background-color: #0056b3;
 }
