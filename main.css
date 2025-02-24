@@ -1,0 +1,72 @@
+header {
+ margin-top: 20px;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ height: 100px;
+ background-color: white;
+ position: fixed;
+ top: 0;
+ width: 100%;
+ z-index: 1000;
+}
+
+#logo {
+ max-width: 330px;
+ height: auto;
+}
+
+#addStudentBtn {
+ background-color: rgb(0, 172, 251);
+ color: white;
+ padding: 10px 20px;
+ font-size: 16px;
+ border: none;
+ border-radius: 5px;
+ cursor: pointer;
+ transition: background 0.3s ease;
+ display: block;
+ margin: 20px auto;
+}
+
+#addStudentBtn:hover {
+ background-color: #116caa;
+}
+main {
+ margin-top: 150px;
+ padding: 20px;
+}
+   table {
+    width: 100%;
+    border-collapse: collapse;
+   }
+
+   th,
+   td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+   }
+
+   .pay-warning {
+    color: red;
+    font-weight: bold;
+   }
+
+   .toggle-container {
+    display: flex;
+    justify-content: center;
+   }
+
+   .toggle {
+    cursor: pointer;
+    padding: 5px 10px;
+    background: #ddd;
+    border-radius: 20px;
+    display: inline-block;
+   }
+
+   .toggle.active {
+    background: #4caf50;
+    color: white;
+   }

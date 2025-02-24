@@ -5,160 +5,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tutoring Management</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
-      table {
-        width: 100%;
-        border-collapse: collapse;
-      }
-      th,
-      td {
-        padding: 10px;
-        border: 1px solid #ddd;
-        text-align: center;
-      }
-      .pay-warning {
-        color: red;
-        font-weight: bold;
-      }
-      .toggle-container {
-        display: flex;
-        justify-content: center;
-      }
-      .toggle {
-        cursor: pointer;
-        padding: 5px 10px;
-        background: #ddd;
-        border-radius: 20px;
-        display: inline-block;
-      }
-      .toggle.active {
-        background: #4caf50;
-        color: white;
-      }
-    </style>
+    <link rel="stylesheet" href="main.css" />
   </head>
   <body>
     <header>
-      <img src="/img/logo.png" alt="Tutoring Management Logo" />
+      <img
+        id="logo"
+        src="/img/logo-transparent.png"
+        alt="Tutoring Management Logo"
+      />
     </header>
+    <main>
+      <button id="addStudentBtn">Add student</button>
+      <table id="studentsTable">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Location</th>
+            <th>Language</th>
+            <th>Hours</th>
+            <th>Classes Left</th>
+            <th>Amount Paid</th>
+            <th>Attend Class</th>
+            <th>Paid</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
 
-    <table id="studentsTable">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Location</th>
-          <th>Language</th>
-          <th>Hours</th>
-          <th>Classes Left</th>
-          <th>Amount Paid</th>
-          <th>Attend Class</th>
-          <th>Paid</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-
-    <div id="paymentForm" style="display: none">
-      <h3>Update Payment</h3>
-      <label>Amount Paid:</label> <input type="number" id="amountPaid" /><br />
-      <label>Class Hours:</label> <input type="number" id="classHours" /><br />
-      <label>New Classes Left:</label>
-      <input type="number" id="newClasses" /><br />
-      <button onclick="submitPayment()">Submit</button>
-    </div>
-
-    <script>
-      const supabase = window.supabase.createClient(
-        "https://ugguhkcxvjunmoebtxow.supabase.co",
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVnZ3Voa2N4dmp1bm1vZWJ0eG93Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk4NjkwMTQsImV4cCI6MjA1NTQ0NTAxNH0.nvKCwO43yjS6-JQhg7DzUEwEkA14zi7Tw332zMbC_GY"
-      );
-
-      let selectedStudentId = null;
-
-      async function fetchStudents() {
-        const { data, error } = await supabase.from("students").select("*");
-        if (error) {
-          console.error(error);
-          return;
-        }
-        const tableBody = document.querySelector("#studentsTable tbody");
-        tableBody.innerHTML = "";
-        data.forEach((student) => {
-          const row = document.createElement("tr");
-          row.innerHTML = `
-                    <td>${student.name}</td>
-                    <td>${student.location}</td>
-                    <td>
-                        <div class="toggle-container">
-                            <div class="toggle ${
-                              student.language === "EN" ? "active" : ""
-                            }" onclick="toggleLanguage('${student.id}', '${
-            student.language
-          }')">${student.language}</div>
-                        </div>
-                    </td>
-                    <td>${student.hours}</td>
-                    <td class="classes-left" data-id="${student.id}">${
-            student.classes_left
-          }/4</td>
-                    <td>${student.amount_paid}</td>
-                    <td><button onclick="attendClass('${student.id}', ${
-            student.classes_left
-          })" ${
-            student.classes_left === 0 ? "disabled" : ""
-          }>Attend</button></td>
-                    <td><button onclick="openPaymentForm('${
-                      student.id
-                    }')">Paid</button></td>
-                `;
-          tableBody.appendChild(row);
-        });
-      }
-
-      async function attendClass(id, classesLeft) {
-        if (classesLeft > 0) {
-          const newClassesLeft = classesLeft - 1;
-          await supabase
-            .from("students")
-            .update({ classes_left: newClassesLeft })
-            .eq("id", id);
-          fetchStudents();
-        }
-      }
-
-      function openPaymentForm(id) {
-        selectedStudentId = id;
-        document.getElementById("paymentForm").style.display = "block";
-      }
-
-      async function submitPayment() {
-        const amount = document.getElementById("amountPaid").value;
-        const hours = document.getElementById("classHours").value;
-        const newClasses = document.getElementById("newClasses").value;
-        if (selectedStudentId) {
-          await supabase
-            .from("students")
-            .update({
-              amount_paid: amount,
-              hours: hours,
-              classes_left: newClasses,
-            })
-            .eq("id", selectedStudentId);
-          document.getElementById("paymentForm").style.display = "none";
-          fetchStudents();
-        }
-      }
-
-      async function toggleLanguage(id, currentLang) {
-        const newLang = currentLang === "EN" ? "FR" : "EN";
-        await supabase
-          .from("students")
-          .update({ language: newLang })
-          .eq("id", id);
-        fetchStudents();
-      }
-
-      fetchStudents();
-    </script>
+      <div id="paymentForm" style="display: none">
+        <h3>Update Payment</h3>
+        <label>Amount Paid:</label>
+        <input type="number" id="amountPaid" /><br />
+        <label>Class Hours:</label>
+        <input type="number" id="classHours" /><br />
+        <label>New Classes Left:</label>
+        <input type="number" id="newClasses" /><br />
+        <button onclick="submitPayment()">Submit</button>
+      </div>
+    </main>
+    <script src="main.js"></script>
   </body>
 </html>
