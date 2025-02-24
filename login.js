@@ -16,7 +16,7 @@ console.log("✅ Supabase initialized:", supabase);
 
 // Ensure DOM is fully loaded before adding event listeners
 document.addEventListener("DOMContentLoaded", () => {
-    const loginForm = document.querySelector("login-form");
+    const loginForm = document.getElementById("login-form");
 
     if (!loginForm) {
         console.error("❌ Login form not found in the DOM!");
